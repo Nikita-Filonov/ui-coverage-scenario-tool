@@ -1,0 +1,3 @@
+include ui_coverage_tool/config.py
+recursive-include ui_coverage_tool/cli/*
+recursive-include ui_coverage_tool/src *

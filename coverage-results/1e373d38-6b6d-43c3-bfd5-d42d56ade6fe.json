@@ -1,0 +1,1 @@
+{"app":"ui-course","selector":"//*[@data-testid='create-course-toolbar-title-text']","action_type":"VISIBLE","selector_type":"XPATH"}

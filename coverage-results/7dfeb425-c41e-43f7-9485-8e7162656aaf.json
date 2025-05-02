@@ -1,0 +1,1 @@
+{"app":"ui-course","selector":"//*[@data-testid='logout-drawer-list-item-title-text']","action_type":"VISIBLE","selector_type":"XPATH"}

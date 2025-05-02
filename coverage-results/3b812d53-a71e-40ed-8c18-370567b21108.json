@@ -1,0 +1,1 @@
+{"app":"ui-course","selector":"//*[@data-testid='create-course-form-max-score-input']//input","action_type":"FILL","selector_type":"XPATH"}

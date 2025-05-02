@@ -1,0 +1,1 @@
+{"app":"ui-course","selector":"//*[@data-testid='login-page-wrong-email-or-password-alert']","action_type":"TEXT","selector_type":"XPATH"}

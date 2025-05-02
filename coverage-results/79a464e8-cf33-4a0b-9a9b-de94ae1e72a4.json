@@ -1,0 +1,1 @@
+{"app":"ui-course","selector":"//*[@data-testid='create-course-form-estimated-time-input']//input","action_type":"VISIBLE","selector_type":"XPATH"}

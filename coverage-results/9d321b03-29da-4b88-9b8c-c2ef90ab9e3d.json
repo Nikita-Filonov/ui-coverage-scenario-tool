@@ -1,0 +1,1 @@
+{"app":"ui-course","selector":"//*[@data-testid='registration-form-username-input']//input","action_type":"VALUE","selector_type":"XPATH"}
