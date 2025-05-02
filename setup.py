@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="ui-coverage-tool",
-    version="0.23.0",
+    name="ui-coverage-scenario-tool",
+    version="0.1.0",
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
@@ -13,7 +13,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'ui-coverage-tool = ui_coverage_tool.cli.main:cli',
+            'ui-coverage-scenario-tool = ui_coverage_scenario_tool.cli.main:cli',
         ],
     },
     author="Nikita Filonov",
@@ -24,9 +24,9 @@ setup(
     ),
     long_description=open('README.md').read(),
     long_description_content_type="text/markdown",
-    url="https://github.com/Nikita-Filonov/ui-coverage-tool",
+    url="https://github.com/Nikita-Filonov/ui-coverage-scenario-tool",
     project_urls={
-        "Bug Tracker": "https://github.com/Nikita-Filonov/ui-coverage-tool/issues",
+        "Bug Tracker": "https://github.com/Nikita-Filonov/ui-coverage-scenario-tool/issues",
     },
     classifiers=[
         "Programming Language :: Python :: 3",

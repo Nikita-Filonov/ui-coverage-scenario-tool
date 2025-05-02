@@ -111,36 +111,36 @@ from playwright.sync_api import sync_playwright
 # - UICoverageTracker — the main class for tracking coverage
 # - SelectorType — type of selector (CSS, XPATH)
 # - ActionType — type of action (CLICK, FILL, CHECK_VISIBLE, etc.)
-from ui_coverage_tool import UICoverageTracker, SelectorType, ActionType
+from ui_coverage_scenario_tool import UICoverageTracker, SelectorType, ActionType
 
 # Create an instance of the tracker.
 # The `app` value should match the name in your UI_COVERAGE_APPS config.
 tracker = UICoverageTracker(app="my-ui-app")
 
 with sync_playwright() as playwright:
-    browser = playwright.chromium.launch()
-    page = browser.new_page()
-    page.goto("https://my-ui-app.com/login")
+  browser = playwright.chromium.launch()
+  page = browser.new_page()
+  page.goto("https://my-ui-app.com/login")
 
-    username_input = page.locator("#username-input")
-    username_input.fill('user@example.com')
+  username_input = page.locator("#username-input")
+  username_input.fill('user@example.com')
 
-    # Track this interaction with the tracker
-    tracker.track_coverage(
-        selector='#username-input',  # The selector (CSS)
-        action_type=ActionType.FILL,  # The action type: FILL
-        selector_type=SelectorType.CSS  # The selector type: CSS
-    )
+  # Track this interaction with the tracker
+  tracker.track_coverage(
+    selector='#username-input',  # The selector (CSS)
+    action_type=ActionType.FILL,  # The action type: FILL
+    selector_type=SelectorType.CSS  # The selector type: CSS
+  )
 
-    login_button = page.locator('//button[@id="login-button"]')
-    login_button.click()
+  login_button = page.locator('//button[@id="login-button"]')
+  login_button.click()
 
-    # Track the click action with the tracker
-    tracker.track_coverage(
-        selector='//button[@id="login-button"]',  # The selector (XPath)
-        action_type=ActionType.CLICK,  # The action type: CLICK
-        selector_type=SelectorType.XPATH  # The selector type: XPath
-    )
+  # Track the click action with the tracker
+  tracker.track_coverage(
+    selector='//button[@id="login-button"]',  # The selector (XPath)
+    action_type=ActionType.CLICK,  # The action type: CLICK
+    selector_type=SelectorType.XPATH  # The selector type: XPath
+  )
 
 ```
 
@@ -154,7 +154,7 @@ Quick summary:
 
 ```python
 from selenium import webdriver
-from ui_coverage_tool import UICoverageTracker, SelectorType, ActionType
+from ui_coverage_scenario_tool import UICoverageTracker, SelectorType, ActionType
 
 driver = webdriver.Chrome()
 
@@ -221,7 +221,7 @@ tool looks for configuration in:
 - `.env` (for environment variable configuration)
 
 All paths are relative to the current working directory, and configuration is automatically loaded
-via [get_settings()](./ui_coverage_tool/config.py).
+via [get_settings()](ui_coverage_scenario_tool/config.py).
 
 **Important!** Files must be in the project root.
 

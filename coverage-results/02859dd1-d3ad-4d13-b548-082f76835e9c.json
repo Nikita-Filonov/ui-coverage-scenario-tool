@@ -1,1 +1,0 @@
-{"app":"ui-course","selector":"//*[@data-testid='create-course-form-description-input']//textarea","action_type":"VISIBLE","selector_type":"XPATH"}
