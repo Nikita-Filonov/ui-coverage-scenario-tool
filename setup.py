@@ -2,8 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name="ui-coverage-scenario-tool",
-    version="0.5.0",
+    version="0.6.0",
     packages=find_packages(),
+    package_data={
+        'ui_coverage_scenarios_tool': [
+            'src/reports/templates/*.html',
+        ],
+    },
     include_package_data=True,
     install_requires=[
         "click",
