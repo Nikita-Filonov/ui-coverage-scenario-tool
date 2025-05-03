@@ -65,17 +65,17 @@ If you have any questions or need assistance, feel free to ask [@Nikita Filonov]
 
 ![History](./docs/screenshots/history.png "History")
 
-### Frame
+### Scenarios
 
-![Frame](./docs/screenshots/frame.png "Frame")
+![Scenarios](./docs/screenshots/scenarios.png "Scenarios")
+
+### Scenario Details
+
+![Scenario Details](./docs/screenshots/scenario_details.png "Scenario Details")
 
 ### Element Details
 
 ![Element Details](./docs/screenshots/element_details.png "Element Details")
-
-### Elements Table
-
-![Elements Table](./docs/screenshots/elements_table.png "Elements Table")
 
 ## About the Tools
 
