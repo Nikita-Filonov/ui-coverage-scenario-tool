@@ -1,0 +1,4 @@
+[submodule "submodules/ui-coverage-scenario-report"]
+	path = submodules/ui-coverage-scenario-report
+	url = https://github.com/Nikita-Filonov/ui-coverage-scenario-report
+	tag = v0.1.0

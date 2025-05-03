@@ -7,8 +7,8 @@ logger = get_logger("COPY_REPORT")
 
 
 def copy_report_command():
-    source_file = pathlib.Path("./submodules/ui-coverage-report/build/index.html")
-    destination_file = pathlib.Path("./ui_coverage_tool/src/reports/templates/index.html")
+    source_file = pathlib.Path("./submodules/ui-coverage-scenario-report/build/index.html")
+    destination_file = pathlib.Path("./ui_coverage_scenario_tool/src/reports/templates/index.html")
 
     logger.info(f"Starting to copy report from {source_file} to {destination_file}")
 
