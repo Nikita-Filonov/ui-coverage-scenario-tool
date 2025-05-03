@@ -29,14 +29,14 @@ class Settings(BaseSettings):
         extra='allow',
 
         env_file=os.path.join(os.getcwd(), ".env"),
-        env_prefix="UI_COVERAGE_",
+        env_prefix="UI_COVERAGE_SCENARIO_",
         env_file_encoding="utf-8",
         env_nested_delimiter=".",
 
-        yaml_file=os.path.join(os.getcwd(), "ui_coverage_config.yaml"),
+        yaml_file=os.path.join(os.getcwd(), "ui_coverage_scenario_config.yaml"),
         yaml_file_encoding="utf-8",
 
-        json_file=os.path.join(os.getcwd(), "ui_coverage_config.json"),
+        json_file=os.path.join(os.getcwd(), "ui_coverage_scenario_config.json"),
         json_file_encoding="utf-8"
     )
 
