@@ -24,55 +24,13 @@ top, letting you see exactly what was tested and how.
 - **Multi-app support:** Testing multiple domains? No problem. Just list your apps in the config — the report will let
   you switch between them.
 
-### About the Tools
-
-There are two separate tools, each with its own purpose, strengths, and philosophy:
-
-🟢 [ui-coverage-tool](https://github.com/Nikita-Filonov/ui-coverage-tool) — Simple & Instant Coverage
-This is the original tool. It’s designed to be:
-
-- **Extremely simple and fast to integrate**
-- **Ideal for quick visibility** into which elements your UI tests are interacting with
-- **Perfect for prototyping or smoke-checks**, where deep scenario structure isn’t needed
-
-Think of [ui-coverage-tool](https://github.com/Nikita-Filonov/ui-coverage-tool) as the lightweight, no-frills solution
-for getting instant test coverage insights with minimal setup.
-
-🔵 [ui-coverage-scenario-tool](https://github.com/Nikita-Filonov/ui-coverage-scenario-tool) — Scenario-Based & Insightful
-This is the advanced version of the original tool, built on top of all its features — and more:
-
-- Includes everything from `ui-coverage-tool`
-- Adds **scenario-level structure**, so your coverage report shows:
-    - Which **scenarios** were executed
-    - Which **elements** were used in each scenario
-    - Which **scenarios** interacted with a given element
-- Lets you **link scenarios to TMS test cases** or documentation (e.g. via URLs)
-- Offers additional options like:
-    - **Iframe zoom settings**
-    - **Scenario metadata**
-    - **Advanced filtering and analysis**
-
-If your team needs deeper visibility into business processes and scenario
-coverage, [ui-coverage-scenario-tool](https://github.com/Nikita-Filonov/ui-coverage-scenario-tool) is the way to go.
-
-## Why Two Tools?
-
-While `ui-coverage-scenario-tool` is more powerful, the original `ui-coverage-tool` still has a place.
-
-They serve different purposes:
-
-| Tool                        | Best For                                      | Strengths                                     |
-|-----------------------------|-----------------------------------------------|-----------------------------------------------|
-| `ui-coverage-tool`          | Quick setup, lightweight testing environments | Easy to integrate, minimal overhead           |
-| `ui-coverage-scenario-tool` | Structured E2E scenarios, business test cases | Rich detail, scenario linkage, deeper insight |
-
-Keeping them separate allows users to choose based on **project needs**, **team maturity**, and **desired complexity**.
-
 ## Table of Contents
 
 - [Features](#features)
 - [Links](#links)
 - [Preview](#preview)
+- [About the Tools](#about-the-tools)
+- [Why Two Tools?](#why-two-tools)
 - [Installation](#installation)
 - [Embedding the Agent Script](#embedding-the-agent-script)
 - [Usage](#usage)
@@ -118,6 +76,50 @@ If you have any questions or need assistance, feel free to ask [@Nikita Filonov]
 ### Elements Table
 
 ![Elements Table](./docs/screenshots/elements_table.png "Elements Table")
+
+## About the Tools
+
+There are two separate tools, each with its own purpose, strengths, and philosophy:
+
+🟢 [ui-coverage-tool](https://github.com/Nikita-Filonov/ui-coverage-tool) — Simple & Instant Coverage
+This is the original tool. It’s designed to be:
+
+- **Extremely simple and fast to integrate**
+- **Ideal for quick visibility** into which elements your UI tests are interacting with
+- **Perfect for prototyping or smoke-checks**, where deep scenario structure isn’t needed
+
+Think of [ui-coverage-tool](https://github.com/Nikita-Filonov/ui-coverage-tool) as the lightweight, no-frills solution
+for getting instant test coverage insights with minimal setup.
+
+🔵 [ui-coverage-scenario-tool](https://github.com/Nikita-Filonov/ui-coverage-scenario-tool) — Scenario-Based & Insightful
+This is the advanced version of the original tool, built on top of all its features — and more:
+
+- Includes everything from `ui-coverage-tool`
+- Adds **scenario-level structure**, so your coverage report shows:
+    - Which **scenarios** were executed
+    - Which **elements** were used in each scenario
+    - Which **scenarios** interacted with a given element
+- Lets you **link scenarios to TMS test cases** or documentation (e.g. via URLs)
+- Offers additional options like:
+    - **Iframe zoom settings**
+    - **Scenario metadata**
+    - **Advanced filtering and analysis**
+
+If your team needs deeper visibility into business processes and scenario
+coverage, [ui-coverage-scenario-tool](https://github.com/Nikita-Filonov/ui-coverage-scenario-tool) is the way to go.
+
+## Why Two Tools?
+
+While `ui-coverage-scenario-tool` is more powerful, the original `ui-coverage-tool` still has a place.
+
+They serve different purposes:
+
+| Tool                        | Best For                                      | Strengths                                     |
+|-----------------------------|-----------------------------------------------|-----------------------------------------------|
+| `ui-coverage-tool`          | Quick setup, lightweight testing environments | Easy to integrate, minimal overhead           |
+| `ui-coverage-scenario-tool` | Structured E2E scenarios, business test cases | Rich detail, scenario linkage, deeper insight |
+
+Keeping them separate allows users to choose based on **project needs**, **team maturity**, and **desired complexity**.
 
 ## Installation
 
