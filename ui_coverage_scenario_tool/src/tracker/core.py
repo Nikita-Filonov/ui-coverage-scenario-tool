@@ -1,5 +1,3 @@
-import time
-
 from ui_coverage_scenario_tool.config import Settings, get_settings
 from ui_coverage_scenario_tool.src.tools.actions import ActionType
 from ui_coverage_scenario_tool.src.tools.logger import get_logger
@@ -31,7 +29,6 @@ class UICoverageTracker:
 
     def end_scenario(self):
         if self.scenario:
-            self.scenario.end_timestamp = time.time()
             self.storage.save_scenario_result(self.scenario)
 
         self.scenario = None
