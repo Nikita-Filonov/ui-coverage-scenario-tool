@@ -14,8 +14,8 @@ from ui_coverage_scenario_tool.src.tracker.models import (
 
 logger = get_logger("UI_COVERAGE_TRACKER_STORAGE")
 
-Coverage = TypeVar('Coverage', bound=BaseModel)
-CoverageList = TypeVar('CoverageList', bound=RootModel)
+Result = TypeVar('Result', bound=BaseModel)
+ResultList = TypeVar('ResultList', bound=RootModel)
 
 
 class UICoverageTrackerStorage:
@@ -25,25 +25,25 @@ class UICoverageTrackerStorage:
     def load(
             self,
             context: str,
-            coverage: type[Coverage],
-            coverage_list: type[CoverageList]
-    ) -> CoverageList:
+            result: type[Result],
+            result_list: type[ResultList]
+    ) -> ResultList:
         results_dir = self.settings.results_dir
         logger.info(f"Loading coverage results from directory: {results_dir}")
 
         if not results_dir.exists():
             logger.warning(f"Results directory does not exist: {results_dir}")
-            return coverage_list(root=[])
+            return result_list(root=[])
 
         results = [
-            coverage.model_validate_json(file.read_text())
+            result.model_validate_json(file.read_text())
             for file in results_dir.glob(f"*-{context}.json") if file.is_file()
         ]
 
         logger.info(f"Loaded {len(results)} coverage files from directory: {results_dir}")
-        return coverage_list(root=results)
+        return result_list(root=results)
 
-    def save(self, context: str, coverage: Coverage):
+    def save(self, context: str, result: Result):
         results_dir = self.settings.results_dir
 
         if not results_dir.exists():
@@ -53,18 +53,18 @@ class UICoverageTrackerStorage:
         result_file = results_dir.joinpath(f'{uuid.uuid4()}-{context}.json')
 
         try:
-            result_file.write_text(coverage.model_dump_json())
+            result_file.write_text(result.model_dump_json())
         except Exception as error:
             logger.error(f"Error saving {context} coverage data to file {result_file}: {error}")
 
-    def save_element_result(self, coverage: CoverageElementResult):
-        self.save("element", coverage)
+    def save_element_result(self, result: CoverageElementResult):
+        self.save("element", result)
 
     def load_element_results(self) -> CoverageElementResultList:
         return self.load("element", CoverageElementResult, CoverageElementResultList)
 
-    def save_scenario_result(self, coverage: CoverageScenarioResult):
-        self.save("scenario", coverage)
+    def save_scenario_result(self, result: CoverageScenarioResult):
+        self.save("scenario", result)
 
     def load_scenario_results(self) -> CoverageScenarioResultList:
         return self.load("scenario", CoverageScenarioResult, CoverageScenarioResultList)

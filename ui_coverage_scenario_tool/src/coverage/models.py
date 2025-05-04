@@ -6,21 +6,6 @@ from ui_coverage_scenario_tool.src.tools.selector import SelectorType
 from ui_coverage_scenario_tool.src.tools.types import Selector, ScenarioName
 
 
-# class ActionCoverage(BaseModel):
-#     type: ActionType
-#     count: int
-#
-#
-# class ElementCoverage(BaseModel):
-#     model_config = ConfigDict(populate_by_name=True)
-#
-#     history: list[ElementHistory]
-#     actions: list[ActionCoverage]
-#     selector: Selector
-#     scenarios: list[UUID4]
-#     selector_type: SelectorType = Field(alias="selectorType")
-
-
 class ScenarioCoverageStep(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
