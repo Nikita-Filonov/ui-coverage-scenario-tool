@@ -359,7 +359,7 @@ json_report_file: "./coverage-report.json"
 
 ```json
 {
-  "services": [
+  "apps": [
     {
       "key": "my-ui-app",
       "url": "https://my-ui-app.com/login",
