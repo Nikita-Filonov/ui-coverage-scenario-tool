@@ -304,13 +304,13 @@ via [get_settings()](ui_coverage_scenario_tool/config.py).
 ### Configuration via `.env`
 
 All settings can be declared using environment variables. Nested fields use dot notation, and all variables must be
-prefixed with `UI_COVERAGE_`.
+prefixed with `UI_COVERAGE_SCENARIO_`.
 
 **Example:** [.env](docs/configs/.env.example)
 
 ```dotenv
 # Define the applications that should be tracked. In the case of multiple apps, they can be added in a comma-separated list.
-UI_COVERAGE_APPS='[
+UI_COVERAGE_SCENARIO_APPS='[
     {
         "key": "my-ui-app",
         "url": "https://my-ui-app.com/login",
@@ -321,17 +321,17 @@ UI_COVERAGE_APPS='[
 ]'
 
 # The directory where the coverage results will be saved.
-UI_COVERAGE_RESULTS_DIR="./coverage-results"
+UI_COVERAGE_SCENARIO_RESULTS_DIR="./coverage-results"
 
 # The file that stores the history of coverage results.
-UI_COVERAGE_HISTORY_FILE="./coverage-history.json"
+UI_COVERAGE_SCENARIO_HISTORY_FILE="./coverage-history.json"
 
 # The retention limit for the coverage history. It controls how many historical results to keep.
-UI_COVERAGE_HISTORY_RETENTION_LIMIT=30
+UI_COVERAGE_SCENARIO_HISTORY_RETENTION_LIMIT=30
 
 # Optional file paths for the HTML and JSON reports.
-UI_COVERAGE_HTML_REPORT_FILE="./index.html"
-UI_COVERAGE_JSON_REPORT_FILE="./coverage-report.json"
+UI_COVERAGE_SCENARIO_HTML_REPORT_FILE="./index.html"
+UI_COVERAGE_SCENARIO_JSON_REPORT_FILE="./coverage-report.json"
 ```
 
 ### Configuration via YAML
