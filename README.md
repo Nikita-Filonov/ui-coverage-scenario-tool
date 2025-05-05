@@ -36,6 +36,7 @@ top, letting you see exactly what was tested and how.
 - [Usage](#usage)
     - [Playwright](#playwright)
     - [Selenium](#selenium)
+    - [Advanced Example](#advanced-example)
     - [Coverage Report Generation](#coverage-report-generation)
 - [Configuration](#configuration)
     - [.env](#configuration-via-env)
@@ -240,6 +241,114 @@ tracker.track_coverage('//button[@id="login-button"]', ActionType.CLICK, Selecto
 # End the current scenario
 tracker.end_scenario()
 ```
+
+### Advanced Example
+
+This setup shows how to integrate `ui-coverage-scenario-tool` into a Python Playwright project using a custom **tracker
+fixture.** The `UICoverageTracker` is injected into each test and passed to page objects for interaction tracking.
+
+#### Step 1: Define a Custom Tracker Fixture
+
+We define a tracker fixture that:
+
+- Creates a new `UICoverageTracker` per test
+- Starts a scenario using the test's name from `request.node.name`
+- Yields the tracker into the test
+- Ends the scenario automatically after the test completes
+
+`./tests/conftest.py`
+
+```python
+from typing import Generator, Any
+
+import pytest
+
+from ui_coverage_scenario_tool import UICoverageTracker
+
+
+@pytest.fixture
+def ui_coverage_tracker(request) -> Generator[UICoverageTracker, Any, None]:
+    # Instantiate the UI coverage tracker with your app name
+    tracker = UICoverageTracker(app="ui-course")
+
+    # Start a new scenario using the test name for traceability
+    tracker.start_scenario(
+        url=None,  # Optional external URL (e.g., link to TMS); can be set dynamically
+        name=request.node.name  # Use pytest's node name (test function name)
+    )
+
+    # Provide the tracker to the test and any dependent components
+    yield tracker
+
+    # End the scenario after the test has run
+    tracker.end_scenario()
+
+```
+
+This fixture ensures a new, isolated tracker per test, which helps maintain clean test boundaries and supports parallel
+execution.
+
+#### Step 2: Use the Tracker in a Page Object
+
+Here, we define a `LoginPage` class that performs a user action and tracks it via the provided `UICoverageTracker`.
+
+`./pages/login_page.py`
+
+```python
+from playwright.sync_api import Page
+
+from ui_coverage_scenario_tool import ActionType, SelectorType, UICoverageTracker
+
+
+class LoginPage:
+    def __init__(self, page: Page, tracker: UICoverageTracker):
+        self.page = page
+        self.tracker = tracker
+
+    def click_login_button(self):
+        # Perform the UI interaction
+        self.page.click('#login')
+
+        # Track the interaction using the coverage tool
+        self.tracker.track_coverage(
+            selector='#login',  # The CSS selector that was used
+            action_type=ActionType.CLICK,  # Type of user action
+            selector_type=SelectorType.CSS  # Type of selector used (CSS in this case)
+        )
+```
+
+This makes interaction tracking part of your UI logic and encourages traceable, observable behavior within components.
+
+#### Step 3: Use the Tracker in a Test
+
+Here’s a sample test that uses both the `page` fixture (from Playwright) and the `tracker` fixture you defined:
+
+`./tests/test_important_feature.py`
+
+```python
+from pages.login_page import LoginPage
+from playwright.sync_api import Page
+
+from ui_coverage_scenario_tool import UICoverageTracker
+
+
+def test_login(page: Page, ui_coverage_tracker: UICoverageTracker):
+    # Pass both the Playwright page and tracker to your page object
+    login_page = LoginPage(page, ui_coverage_tracker)
+
+    # Perform the action — tracking happens automatically within the method
+    login_page.click_login_button()
+```
+
+The test itself stays clean and focused. Thanks to fixtures, all setup and teardown logic is handled automatically.
+
+#### Why This Approach Works
+
+- **Pytest idiomatic** — Uses `@pytest.fixture` for clean, composable test setup.
+- **Per-test isolation** — Every test has its own `UICoverageTracker` instance and scenario context.
+- **Explicit injection** — The tracker is passed explicitly to page objects, making dependencies easy to trace and mock.
+- **Supports concurrency** — No global state is used, so tests can run in parallel safely.
+- **Minimal boilerplate** — No need for additional lifecycle hooks or monkeypatching.
 
 ### Coverage Report Generation
 
