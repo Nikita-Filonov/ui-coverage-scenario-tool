@@ -14,13 +14,15 @@ top, letting you see exactly what was tested and how.
 - **Custom highlight & badge colors:** Easily change the highlight and badge colors used in the iframe for different
   action types or UI states. Great for tailoring the report to your team's visual style or accessibility needs.
 - **No framework lock-in:** Works with any UI testing framework (Playwright, Selenium, etc.) by simply logging actions
-  via the `track_coverage()` method.
+  via the `track_element()` method.
 - **Element-level statistics:** View detailed statistics by selector: type of action, count of actions, and a timeline
   graph of coverage.
 - **Global history overview:** Track historical trends of total coverage and action types across time.
 - **Per-element timeline:** Dive deep into the history of interactions for each element — when and how it was used.
 - **Full element index:** Searchable table of all elements interacted with during tests, even if you're not sure where
   they are in the UI.
+- **Support for visualizing pages in a graph:** The tool offers a unique capability to build a graph of the pages
+  involved in tests, as well as the transitions between them.
 - **Multi-app support:** Testing multiple domains? No problem. Just list your apps in the config — the report will let
   you switch between them.
 
@@ -38,6 +40,7 @@ top, letting you see exactly what was tested and how.
     - [Selenium](#selenium)
     - [Advanced Example](#advanced-example)
     - [Coverage Report Generation](#coverage-report-generation)
+    - [Tracker Method Overview](#tracker-method-overview)
 - [Configuration](#configuration)
     - [.env](#configuration-via-env)
     - [YAML](#configuration-via-yaml)
@@ -65,6 +68,10 @@ If you have any questions or need assistance, feel free to ask [@Nikita Filonov]
 ### History
 
 ![History](./docs/screenshots/history.png "History")
+
+### Pages
+
+![Pages](./docs/screenshots/pages.png "Pages")
 
 ### Scenarios
 
@@ -147,7 +154,7 @@ That’s it. No other setup required. Without this script, the coverage report w
 ## Usage
 
 Below are examples of how to use the tool with two popular UI automation frameworks: `Playwright` and `Selenium`. In
-both cases, coverage data is automatically saved to the `./coverage-results` folder after each call to `track_coverage`.
+both cases, coverage data is automatically saved to the `./coverage-results` folder after each call to `track_element`.
 
 ### Playwright
 
@@ -181,7 +188,7 @@ with sync_playwright() as playwright:
     username_input.fill('user@example.com')
 
     # Track this interaction with the tracker
-    tracker.track_coverage(
+    tracker.track_element(
         selector='#username-input',  # The selector (CSS)
         action_type=ActionType.FILL,  # The action type: FILL
         selector_type=SelectorType.CSS  # The selector type: CSS
@@ -191,7 +198,7 @@ with sync_playwright() as playwright:
     login_button.click()
 
     # Track the click action with the tracker
-    tracker.track_coverage(
+    tracker.track_element(
         selector='//button[@id="login-button"]',  # The selector (XPath)
         action_type=ActionType.CLICK,  # The action type: CLICK
         selector_type=SelectorType.XPATH  # The selector type: XPath
@@ -205,7 +212,7 @@ with sync_playwright() as playwright:
 Quick summary:
 
 - Call `tracker.start_scenario()` to begin a new scenario.
-- Use `tracker.track_coverage()` after each user interaction.
+- Use `tracker.track_element()` after each user interaction.
 - Provide the selector, action type, and selector type.
 - The tool automatically stores tracking data as JSON files.
 - Once the scenario is complete, call `tracker.end_scenario()` to finalize and save it.
@@ -230,13 +237,13 @@ username_input = driver.find_element("css selector", "#username-input")
 username_input.send_keys("user@example.com")
 
 # Track the fill action
-tracker.track_coverage('#username-input', ActionType.FILL, SelectorType.CSS)
+tracker.track_element('#username-input', ActionType.FILL, SelectorType.CSS)
 
 login_button = driver.find_element("xpath", '//button[@id="login-button"]')
 login_button.click()
 
 # Track the click action
-tracker.track_coverage('//button[@id="login-button"]', ActionType.CLICK, SelectorType.XPATH)
+tracker.track_element('//button[@id="login-button"]', ActionType.CLICK, SelectorType.XPATH)
 
 # End the current scenario
 tracker.end_scenario()
@@ -305,19 +312,33 @@ class LoginPage:
         self.page = page
         self.tracker = tracker
 
+        # Track that the test has opened this page.
+        # Useful for identifying which pages were actually visited during test execution.
+        self.tracker.track_page(
+            url="/auth/login",  # Logical or real URL of the page
+            page="LoginPage",  # Human-readable name of the page
+            priority=0  # Used to indicate order on the pages graph
+        )
+
     def click_login_button(self):
         # Perform the UI interaction
         self.page.click('#login')
 
         # Track the interaction using the coverage tool
-        self.tracker.track_coverage(
+        self.tracker.track_element(
             selector='#login',  # The CSS selector that was used
             action_type=ActionType.CLICK,  # Type of user action
             selector_type=SelectorType.CSS  # Type of selector used (CSS in this case)
         )
+
+        # Track the navigation that follows this interaction.
+        # Helps build a picture of the flow between pages.
+        self.tracker.track_transition(from_page="LoginPage", to_page="DashboardPage")
 ```
 
-This makes interaction tracking part of your UI logic and encourages traceable, observable behavior within components.
+This makes interaction tracking an integral part of your UI logic and encourages traceable, observable behavior within
+your components and flows. By logging page visits, element interactions, and navigation transitions, your test coverage
+becomes more transparent, measurable, and auditable.
 
 #### Step 3: Use the Tracker in a Test
 
@@ -352,7 +373,7 @@ The test itself stays clean and focused. Thanks to fixtures, all setup and teard
 
 ### Coverage Report Generation
 
-After every call to `tracker.track_coverage(...)`, the tool automatically stores coverage data in
+After every call to `tracker.track_element(...)`, the tool automatically stores coverage data in
 the `./coverage-results/` directory as JSON files. You don’t need to manually manage the folder — it’s created and
 populated automatically.
 
@@ -364,7 +385,7 @@ populated automatically.
 ```
 
 When you call `tracker.start_scenario(...)`, a new scenario automatically begins. All subsequent actions, such as
-`tracker.track_coverage(...)`, will be logged within the context of this scenario. To finalize and save the scenario,
+`tracker.track_element(...)`, will be logged within the context of this scenario. To finalize and save the scenario,
 you need to call `tracker.end_scenario()`. This method ends the scenario and saves it to a JSON file.
 
 ```
@@ -395,6 +416,80 @@ This will generate:
 **Important!** The `ui-coverage-scenario-tool save-report` command must be run from the **root of your project**, where
 your config files (`.env`, `ui_coverage_scenario_config.yaml`, etc.) are located. Running it from another directory may
 result in missing data or an empty report.
+
+### Tracker Method Overview
+
+#### 🔹 `start_scenario`
+
+**Signature:** `start_scenario(url: str | None, name: str)`
+
+**What it does:** Begins a new UI coverage scenario. This groups all tracked interactions under a single logical test
+case.
+
+**When to use:** Call this at the beginning of each test, typically in a fixture or setup block.
+
+**Parameters:**
+
+- `url`: (Optional) External reference to a test case or issue (e.g., link to TMS or ticket)
+- `name`: A unique name for the scenario — for example, use `request.node.name` in `pytest` to tie it to the test
+  function
+
+#### 🔹 `end_scenario`
+
+**Signature:** `end_scenario()`
+
+**What it does:** Closes the current scenario and finalizes the coverage data collected for that test case.
+
+**When to use:** Call this at the **end of each test**, usually in teardown logic or after `yield` in a fixture.
+
+#### 🔹 `track_page`
+
+**Signature:** `track_page(url: str, page: str, priority: int)`
+
+**What it does:** Marks that a particular page was opened during the test. Useful for identifying what screens were
+visited and when.
+
+**When to use:** Call once in the constructor of each Page Object, or at the point where the test navigates to that
+page.
+
+**Parameters:**
+
+- `url`: Logical or actual route (e.g. `/auth/login`)
+- `page`: Readable identifier like `"LoginPage"`
+- `priority`: Optional number to order or weigh pages in reports
+
+#### 🔹 `track_element`
+
+**Signature:** `track_element(selector: str, action_type: ActionType, selector_type: SelectorType)`
+
+**What it does:** Tracks interaction with a specific UI element (e.g., click, fill, select).
+
+**When to use:** Call it immediately after performing the user action — so that the test log reflects actual UI
+behavior.
+
+**Parameters:**
+
+- `selector`: The selector used in the action (e.g. `#login`)
+- `action_type`: The type of action (`CLICK`, `FILL`, etc.)
+- `selector_type`: Type of selector (`CSS`, `XPATH`)
+
+#### 🔹 `track_transition`
+
+**Signature:** `track_transition(from_page: str, to_page: str)`
+
+**What it does:** Marks a transition between two logical pages or views.
+
+**When to use:** After an action that leads to navigation (e.g., after login button click that brings you to dashboard).
+
+**Parameters:**
+
+- `from_page`: Page before the transition
+- `to_page`: Page after the transition
+
+#### Why it matters
+
+These methods work together to give a complete picture of what pages, elements, and flows are covered by your tests —
+which can be visualized or analyzed later.
 
 ## Configuration
 
@@ -572,7 +667,7 @@ ui-coverage-scenario-tool print-config
 
 - Ensure that `start_scenario()` is called before the test.
 - Ensure that `end_scenario()` is called after the test.
-- Ensure that `track_coverage()` is called during your test.
+- Ensure that `track_page()`, `track_element()`, `track_transition()` is called during your test.
 - Make sure you run `ui-coverage-scenario-tool save-report` from the root directory.
 - Make sure to setup configuration correctly.
 - Check that the `coverage-results` directory contains `.json` files.

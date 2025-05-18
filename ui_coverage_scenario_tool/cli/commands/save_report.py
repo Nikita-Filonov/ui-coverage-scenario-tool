@@ -22,19 +22,26 @@ def save_report_command():
 
     report_state = CoverageReportState.init(settings)
     history_state = history_storage.load()
+    page_results = tracker_storage.load_page_results()
     element_results = tracker_storage.load_element_results()
     scenario_results = tracker_storage.load_scenario_results()
+    transition_results = tracker_storage.load_transition_results()
+
     for app in settings.apps:
+        page_result_list = page_results.filter(app=app.key)
         element_result_list = element_results.filter(app=app.key)
         scenario_result_list = scenario_results.filter(app=app.key)
+        transition_result_list = transition_results.filter(app=app.key)
 
         coverage_builder = UICoverageBuilder(
             history_builder=UICoverageHistoryBuilder(
                 history=history_state.apps.get(app.key, AppHistoryState()),
                 settings=settings
             ),
+            page_result_list=page_result_list,
             element_result_list=element_result_list,
-            scenario_result_list=scenario_result_list
+            scenario_result_list=scenario_result_list,
+            transition_result_list=transition_result_list
         )
         report_state.apps_coverage[app.key] = coverage_builder.build()
 

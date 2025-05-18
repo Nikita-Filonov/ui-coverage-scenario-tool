@@ -5,11 +5,21 @@ from pydantic import BaseModel, RootModel
 
 from ui_coverage_scenario_tool.config import Settings
 from ui_coverage_scenario_tool.src.tools.logger import get_logger
-from ui_coverage_scenario_tool.src.tracker.models import (
+from ui_coverage_scenario_tool.src.tracker.models.elements import (
     CoverageElementResult,
-    CoverageScenarioResult,
     CoverageElementResultList,
-    CoverageScenarioResultList
+)
+from ui_coverage_scenario_tool.src.tracker.models.pages import (
+    CoveragePageResult,
+    CoveragePageResultList,
+)
+from ui_coverage_scenario_tool.src.tracker.models.scenarios import (
+    CoverageScenarioResult,
+    CoverageScenarioResultList,
+)
+from ui_coverage_scenario_tool.src.tracker.models.transitions import (
+    CoverageTransitionResult,
+    CoverageTransitionResultList,
 )
 
 logger = get_logger("UI_COVERAGE_TRACKER_STORAGE")
@@ -57,14 +67,26 @@ class UICoverageTrackerStorage:
         except Exception as error:
             logger.error(f"Error saving {context} coverage data to file {result_file}: {error}")
 
+    def save_page_result(self, result: CoveragePageResult):
+        self.save("page", result)
+
     def save_element_result(self, result: CoverageElementResult):
         self.save("element", result)
-
-    def load_element_results(self) -> CoverageElementResultList:
-        return self.load("element", CoverageElementResult, CoverageElementResultList)
 
     def save_scenario_result(self, result: CoverageScenarioResult):
         self.save("scenario", result)
 
+    def save_transition_result(self, result: CoverageTransitionResult):
+        self.save("transition", result)
+
+    def load_page_results(self) -> CoveragePageResultList:
+        return self.load("page", CoveragePageResult, CoveragePageResultList)
+
+    def load_element_results(self) -> CoverageElementResultList:
+        return self.load("element", CoverageElementResult, CoverageElementResultList)
+
     def load_scenario_results(self) -> CoverageScenarioResultList:
         return self.load("scenario", CoverageScenarioResult, CoverageScenarioResultList)
+
+    def load_transition_results(self) -> CoverageTransitionResultList:
+        return self.load("transition", CoverageTransitionResult, CoverageTransitionResultList)

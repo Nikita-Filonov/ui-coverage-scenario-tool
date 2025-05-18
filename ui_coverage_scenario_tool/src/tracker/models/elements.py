@@ -4,7 +4,7 @@ from functools import cached_property
 from itertools import groupby
 from typing import Self
 
-from pydantic import BaseModel, RootModel, Field, HttpUrl
+from pydantic import BaseModel, RootModel, Field
 
 from ui_coverage_scenario_tool.src.tools.actions import ActionType
 from ui_coverage_scenario_tool.src.tools.selector import SelectorType
@@ -20,12 +20,6 @@ class CoverageElementResult(BaseModel):
     timestamp: float = Field(default_factory=time.time)
     action_type: ActionType
     selector_type: SelectorType
-
-
-class CoverageScenarioResult(BaseModel):
-    app: AppKey
-    url: HttpUrl | None = None
-    name: ScenarioName
 
 
 class CoverageElementResultList(RootModel):
@@ -68,18 +62,6 @@ class CoverageElementResultList(RootModel):
     def total_selectors(self) -> int:
         return len(self.grouped_by_selector)
 
-    def count_action(self, action_type: ActionType) -> int:
-        counter = Counter(r.action_type for r in self.root)
+    def count_actions(self, action_type: ActionType) -> int:
+        counter = Counter(result.action_type for result in self.root)
         return counter.get(action_type, 0)
-
-
-class CoverageScenarioResultList(RootModel):
-    root: list[CoverageScenarioResult]
-
-    def filter(self, app: AppKey | None = None) -> Self:
-        results = [
-            coverage
-            for coverage in self.root
-            if (app is None or coverage.app.lower() == app.lower())
-        ]
-        return CoverageScenarioResultList(root=results)
