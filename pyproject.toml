@@ -1,0 +1,87 @@
+[build-system]
+requires = ["setuptools>=77.0.3", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ui-coverage-scenario-tool"
+version = "0.17.0"
+description = "UI Coverage Scenario Tool tracks and visualizes UI test coverage, scenarios, pages, and transitions directly on your actual application."
+readme = { file = "README.md", content-type = "text/markdown" }
+license = "Apache-2.0"
+license-files = ["LICENSE"]
+authors = [
+    { name = "Nikita Filonov", email = "filonov.nikitkaa@gmail.com" }
+]
+maintainers = [
+    { name = "Nikita Filonov", email = "filonov.nikitkaa@gmail.com" }
+]
+keywords = [
+    "python",
+    "coverage",
+    "ui-coverage",
+    "ui-testing",
+    "test-coverage",
+    "frontend-testing",
+    "visual-testing",
+    "automation",
+    "qa",
+    "quality-assurance",
+    "reporting",
+    "html-report",
+    "pytest",
+    "selenium",
+    "playwright",
+    "web-testing",
+    "test-analytics"
+]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Testing",
+    "Topic :: Software Development :: Quality Assurance"
+]
+requires-python = ">=3.11"
+
+dependencies = [
+    "click",
+    "pyyaml>=6.0.2",
+    "pydantic>=2.0.0",
+    "pydantic-settings>=2.8.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/Nikita-Filonov/ui-coverage-scenario-tool"
+Repository = "https://github.com/Nikita-Filonov/ui-coverage-scenario-tool"
+Issues = "https://github.com/Nikita-Filonov/ui-coverage-scenario-tool/issues"
+
+[project.scripts]
+ui-coverage-scenario-tool = "ui_coverage_scenario_tool.cli.main:cli"
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov"]
+dev = ["pytest", "pytest-cov", "ruff", "build", "twine"]
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["ui_coverage_scenario_tool*"]
+exclude = ["ui_coverage_scenario_tool.tests*"]
+
+[tool.setuptools.package-data]
+"ui_coverage_scenario_tool.src.reports.templates" = ["index.html"]
+
+[tool.pytest.ini_options]
+testpaths = ["ui_coverage_scenario_tool/tests/suites"]
+
+[tool.coverage.run]
+branch = true
+source = ["ui_coverage_scenario_tool"]
+omit = ["ui_coverage_scenario_tool/tests/*"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]

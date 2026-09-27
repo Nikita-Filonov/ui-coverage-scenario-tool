@@ -1,5 +1,11 @@
 # UI Coverage Scenario Tool
 
+[![CI](https://github.com/Nikita-Filonov/ui-coverage-scenario-tool/actions/workflows/workflow-test.yml/badge.svg)](https://github.com/Nikita-Filonov/ui-coverage-scenario-tool/actions/workflows/workflow-test.yml)
+[![codecov](https://codecov.io/gh/Nikita-Filonov/ui-coverage-scenario-tool/branch/main/graph/badge.svg)](https://codecov.io/gh/Nikita-Filonov/ui-coverage-scenario-tool)
+[![PyPI version](https://img.shields.io/pypi/v/ui-coverage-scenario-tool.svg)](https://pypi.org/project/ui-coverage-scenario-tool/)
+[![License](https://img.shields.io/github/license/Nikita-Filonov/ui-coverage-scenario-tool)](./LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Nikita-Filonov/ui-coverage-scenario-tool?style=social)](https://github.com/Nikita-Filonov/ui-coverage-scenario-tool/stargazers)
+
 **UI Coverage Scenario Tool** is an innovative, no-overhead solution for tracking and visualizing UI test coverage —
 directly on your actual application, not static snapshots. The tool collects coverage during UI test execution and
 generates an interactive HTML report. This report embeds a live iframe of your application and overlays coverage data on
@@ -47,6 +53,7 @@ top, letting you see exactly what was tested and how.
     - [JSON](#configuration-via-json)
     - [Reference](#configuration-reference)
 - [Command-Line Interface (CLI)](#command-line-interface-cli)
+- [Troubleshooting](#troubleshooting)
 
 ## Links
 
@@ -611,7 +618,7 @@ No manual data manipulation is required – the tool handles everything automati
 
 ## Command-Line Interface (CLI)
 
-The UI Coverage Tool provides several CLI commands to help with managing and generating coverage reports.
+The UI Coverage Scenario Tool provides several CLI commands to help with managing and generating coverage reports.
 
 ### Command: `save-report`
 
@@ -627,6 +634,24 @@ ui-coverage-scenario-tool save-report
 - This is the main command to generate a coverage report. After executing UI tests and collecting coverage data, use
   this command to aggregate the results into a final report.
 - The report is saved as an HTML file, typically named index.html, which can be opened in any browser.
+
+### Command: `clear-results`
+
+Removes the collected page, element, scenario, and transition result files from the configured `results_dir` before a new
+test run. History and report files are preserved, including when they are stored inside `results_dir`. Other files and
+nested directories are left untouched.
+
+**Usage:**
+
+```shell
+ui-coverage-scenario-tool clear-results
+pytest
+ui-coverage-scenario-tool save-report
+```
+
+Clear results before collecting a new run to prevent previous runs from being counted again. You can also call
+`UICoverageTrackerStorage(settings).clear()` from Python. A missing results directory is harmless; deletion errors cause
+`clear-results` to exit with a non-zero status.
 
 ### Command: `copy-report`
 

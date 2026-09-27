@@ -1,0 +1,26 @@
+name: 🚀 Publish
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: 🧹 lint
+    uses: ./.github/workflows/reusable-lint.yml
+
+  test:
+    name: 🧪 test
+    uses: ./.github/workflows/reusable-test.yml
+    needs: lint
+    secrets: inherit
+
+  pypi:
+    name: 📦 pypi
+    uses: ./.github/workflows/reusable-pypi.yml
+    needs: test
+    secrets: inherit

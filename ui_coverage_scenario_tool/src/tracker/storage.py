@@ -58,7 +58,7 @@ class UICoverageTrackerStorage:
 
         if not results_dir.exists():
             logger.info(f"Results directory does not exist, creating: {results_dir}")
-            results_dir.mkdir(exist_ok=True)
+            results_dir.mkdir(parents=True, exist_ok=True)
 
         result_file = results_dir.joinpath(f'{uuid.uuid4()}-{context}.json')
 
@@ -90,3 +90,33 @@ class UICoverageTrackerStorage:
 
     def load_transition_results(self) -> CoverageTransitionResultList:
         return self.load("transition", CoverageTransitionResult, CoverageTransitionResultList)
+
+    def clear(self) -> None:
+        results_dir = self.settings.results_dir
+
+        if not results_dir.exists():
+            logger.info(f"Results directory does not exist: {results_dir}")
+            return
+
+        if not results_dir.is_dir():
+            raise NotADirectoryError(f"Results path is not a directory: {results_dir}")
+
+        protected_files = {
+            path.resolve()
+            for path in (self.settings.history_file, self.settings.json_report_file, self.settings.html_report_file)
+            if path is not None
+        }
+
+        removed = 0
+        suffixes = ("-page.json", "-element.json", "-scenario.json", "-transition.json")
+        for file in results_dir.iterdir():
+            if not file.name.endswith(suffixes) or not file.is_file() or file.resolve() in protected_files:
+                continue
+
+            try:
+                file.unlink()
+            except OSError as error:
+                raise OSError(f"Failed to remove coverage file {file}: {error}") from error
+            removed += 1
+
+        logger.info(f"Removed {removed} coverage files from directory: {results_dir}")

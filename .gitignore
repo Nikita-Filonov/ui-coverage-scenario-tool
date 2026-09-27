@@ -10,3 +10,13 @@ coverage-history.json
 coverage-report.json
 /index.html
 !docs/index.html
+
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage*
+coverage.xml
+htmlcov/
+build/
+dist/
+*.egg-info/

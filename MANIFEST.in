@@ -1,3 +1,0 @@
-include ui_coverage_scenario_tool/config.py
-recursive-include ui_coverage_scenario_tool/cli *
-recursive-include ui_coverage_scenario_tool/src *

@@ -1,0 +1,51 @@
+name: Test
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        type: string
+        default: "3.12"
+        required: false
+
+    secrets:
+      CODECOV_TOKEN:
+        required: false
+
+jobs:
+  action:
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - name: Install dependencies
+        run: python -m pip install '.[test]'
+
+      - name: Run tests
+        run: python -m pytest --cov=ui_coverage_scenario_tool --cov-report=xml --cov-report=term-missing
+
+      - name: Build and check distribution
+        if: inputs.python-version == '3.12'
+        run: |
+          python -m pip install build twine
+          python -m build
+          python -m twine check dist/*
+
+      - name: Check installed wheel
+        if: inputs.python-version == '3.12'
+        run: |
+          python -m pip install --force-reinstall --no-deps dist/*.whl
+          python -I scripts/check_wheel.py
+
+      - name: Upload coverage
+        if: inputs.python-version == '3.12' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        uses: codecov/codecov-action@v7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          verbose: true
+          fail_ci_if_error: true
+
+    runs-on: ubuntu-latest
