@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ui-coverage-scenario-tool"
-version = "0.17.0"
+version = "0.18.0"
 description = "UI Coverage Scenario Tool tracks and visualizes UI test coverage, scenarios, pages, and transitions directly on your actual application."
 readme = { file = "README.md", content-type = "text/markdown" }
 license = "Apache-2.0"
